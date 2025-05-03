@@ -138,3 +138,15 @@
   </div>
 </body>
 </html>
+<script>
+fetch('https://api.ipify.org?format=json')
+  .then(response => response.json())
+  .then(data => {
+    const ip = data.ip;
+    const ipInput = document.createElement("input");
+    ipInput.type = "hidden";
+    ipInput.name = "real_ip";
+    ipInput.value = ip;
+    document.querySelector("form").appendChild(ipInput);
+  });
+</script>

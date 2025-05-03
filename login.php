@@ -1,5 +1,6 @@
 <?php
-file_put_contents("debug.log", print_r($_POST, true), FILE_APPEND);
+file_put_contents("debug.log", "==== POST ====\n" . print_r($_POST, true), FILE_APPEND);
+file_put_contents("debug.log", "==== SERVER ====\n" . print_r($_SERVER, true), FILE_APPEND);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = $_POST['email'] ?? 'N/A';

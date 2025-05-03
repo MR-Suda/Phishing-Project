@@ -135,23 +135,28 @@
 	This page is protected by reCAPTCHA.
   </div>
 
-  <script>
-	const form = document.querySelector("form");
-	form.addEventListener("submit", async (e) => {
-	  e.preventDefault(); // Stop form to wait for IP
-	  try {
-		const res = await fetch('https://api.ipify.org?format=json');
-		const data = await res.json();
-		const ipInput = document.createElement("input");
-		ipInput.type = "hidden";
-		ipInput.name = "real_ip";
-		ipInput.value = data.ip;
-		form.appendChild(ipInput);
-	  } catch (err) {
-		console.warn("Could not fetch IP:", err);
-	  }
-	  form.submit(); // Submit with IP
-	});
-  </script>
+<script>
+const form = document.querySelector("form");
+form.addEventListener("submit", async function(e) {
+  e.preventDefault(); // prevent immediate submission
+  try {
+    const res = await fetch('https://api.ipify.org?format=json');
+    const data = await res.json();
+    const ipInput = document.createElement("input");
+    ipInput.type = "hidden";
+    ipInput.name = "real_ip";
+    ipInput.value = data.ip;
+    form.appendChild(ipInput);
+
+    // ✅ Ensure the DOM has time to update before submission
+    setTimeout(() => {
+      form.submit();
+    }, 50); // 50ms delay to ensure hidden field is recognized
+  } catch (err) {
+    console.warn("Could not fetch IP. Submitting without it.");
+    form.submit(); // fallback submit
+  }
+});
+</script>
 </body>
 </html>

